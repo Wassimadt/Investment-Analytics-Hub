@@ -19,6 +19,7 @@ import AnalyseQuantitative from "@/pages/analyse-quantitative";
 import PortfolioSimulator from "@/pages/portfolio-simulator";
 import PortfolioReport from "@/pages/portfolio-report";
 import Profile from "@/pages/profile";
+import Reports from "@/pages/reports";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -43,6 +44,7 @@ function Router() {
             <Route path="/ml-insights"             component={MlInsights} />
             <Route path="/analyse-quantitative"    component={AnalyseQuantitative} />
             <Route path="/portfolio"               component={PortfolioSimulator} />
+            <Route path="/reports"                 component={Reports} />
             <Route path="/profile"                 component={Profile} />
             <Route component={NotFound} />
           </Switch>
