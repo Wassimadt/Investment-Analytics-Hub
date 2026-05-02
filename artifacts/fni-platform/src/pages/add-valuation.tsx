@@ -81,7 +81,7 @@ export default function AddValuation() {
                 <Select value={form.companyId} onValueChange={v => { setField("companyId", v); setField("projectId", ""); }}>
                   <SelectTrigger><SelectValue placeholder="Sélectionner une entreprise" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">-- Aucune --</SelectItem>
+                    <SelectItem value="none">-- Aucune --</SelectItem>
                     {companies?.map(c => <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>)}
                   </SelectContent>
                 </Select>
@@ -92,7 +92,7 @@ export default function AddValuation() {
                 <Select value={form.projectId} onValueChange={v => { setField("projectId", v); setField("companyId", ""); }}>
                   <SelectTrigger><SelectValue placeholder="Sélectionner un projet" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">-- Aucun --</SelectItem>
+                    <SelectItem value="none">-- Aucun --</SelectItem>
                     {projects?.map(p => <SelectItem key={p.id} value={String(p.id)}>{p.name}</SelectItem>)}
                   </SelectContent>
                 </Select>
