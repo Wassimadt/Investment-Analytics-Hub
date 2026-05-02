@@ -14,7 +14,7 @@ import {
   AlertCircle, BrainCircuit, Activity, Calendar, ChevronDown, ChevronUp,
   Calculator, ArrowLeft, TrendingUp, MapPin, Building2, Clock, CheckCircle2,
   AlertTriangle, BarChart3, History, Target, Zap, ArrowUpRight, ArrowDownRight,
-  Minus,
+  Minus, Plus,
 } from "lucide-react";
 import { ProjectFinancialAnalysis } from "@/components/project-financial-analysis";
 import { motion } from "framer-motion";
@@ -470,13 +470,26 @@ export default function ProjectDetail() {
       {/* ── Historique des Valorisations ────────────────────────────────── */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-sm">
-            <History className="h-4 w-4 text-primary" />
-            Historique des Valorisations
-          </CardTitle>
-          <CardDescription className="text-xs">
-            {isValuationsLoading ? "Chargement..." : `${sortedValuations.length} valorisation${sortedValuations.length !== 1 ? "s" : ""} enregistrée${sortedValuations.length !== 1 ? "s" : ""}`}
-          </CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <History className="h-4 w-4 text-primary" />
+                Historique des Valorisations
+              </CardTitle>
+              <CardDescription className="text-xs mt-1">
+                {isValuationsLoading ? "Chargement..." : `${sortedValuations.length} valorisation${sortedValuations.length !== 1 ? "s" : ""} enregistrée${sortedValuations.length !== 1 ? "s" : ""}`}
+              </CardDescription>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1.5 text-xs"
+              onClick={() => navigate(`/valuation/new?projectId=${project.id}&returnTo=/projects/${project.id}`)}
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Ajouter une valorisation
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           {isValuationsLoading ? (
@@ -485,7 +498,8 @@ export default function ProjectDetail() {
             <div className="flex flex-col items-center justify-center py-10 gap-3">
               <History className="h-8 w-8 opacity-20" />
               <p className="text-sm text-muted-foreground">Aucune valorisation enregistrée pour ce projet.</p>
-              <Button variant="outline" size="sm" onClick={() => navigate("/valuations/new")}>
+              <Button variant="outline" size="sm" className="gap-1.5 text-xs" onClick={() => navigate(`/valuation/new?projectId=${project.id}&returnTo=/projects/${project.id}`)}>
+                <Plus className="h-3.5 w-3.5" />
                 Ajouter une valorisation
               </Button>
             </div>
