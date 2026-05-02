@@ -1,24 +1,25 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
-import { 
-  LayoutDashboard, 
-  Briefcase, 
-  Building2, 
-  BarChart3, 
-  Calculator, 
+import {
+  LayoutDashboard,
+  Briefcase,
+  Building2,
+  BarChart3,
+  Calculator,
   BrainCircuit,
-  LogOut,
+  FlaskConical,
   Settings
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const navItems = [
   { href: "/", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/projects", icon: Briefcase, label: "Projects" },
-  { href: "/companies", icon: Building2, label: "Companies" },
-  { href: "/comparison", icon: BarChart3, label: "Comparison" },
-  { href: "/valuation", icon: Calculator, label: "Valuation" },
+  { href: "/projects", icon: Briefcase, label: "Projets" },
+  { href: "/companies", icon: Building2, label: "Entreprises" },
+  { href: "/comparison", icon: BarChart3, label: "Comparaison" },
+  { href: "/valuation", icon: Calculator, label: "Valorisation" },
   { href: "/ml-insights", icon: BrainCircuit, label: "ML Insights" },
+  { href: "/analyse-quantitative", icon: FlaskConical, label: "Analyse Quantitative" },
 ];
 
 export function AppLayout({ children }: { children: ReactNode }) {
@@ -47,8 +48,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
               <Link key={item.href} href={item.href}>
                 <div
                   className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer ${
-                    isActive 
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground" 
+                    isActive
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
                       : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
                   }`}
                 >
@@ -78,11 +79,13 @@ export function AppLayout({ children }: { children: ReactNode }) {
       <main className="flex-1 flex flex-col h-full overflow-hidden">
         <header className="h-16 flex items-center justify-between px-8 border-b border-border bg-card flex-shrink-0">
           <h2 className="text-lg font-semibold text-foreground capitalize">
-            {location === "/" ? "Dashboard" : location.split("/")[1].replace("-", " ")}
+            {location === "/" ? "Dashboard"
+              : location === "/analyse-quantitative" ? "Analyse Quantitative"
+              : location.split("/")[1].replace(/-/g, " ")}
           </h2>
           <div className="flex items-center gap-4">
             <span className="text-sm text-muted-foreground font-mono">
-              {new Date().toLocaleDateString("en-US", { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
+              {new Date().toLocaleDateString("fr-DZ", { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
             </span>
           </div>
         </header>

@@ -15,6 +15,7 @@ import Comparison from "@/pages/comparison";
 import Valuation from "@/pages/valuation";
 import AddValuation from "@/pages/add-valuation";
 import MlInsights from "@/pages/ml-insights";
+import AnalyseQuantitative from "@/pages/analyse-quantitative";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ function Router() {
         <Route path="/valuation/new" component={AddValuation} />
         <Route path="/valuation" component={Valuation} />
         <Route path="/ml-insights" component={MlInsights} />
+        <Route path="/analyse-quantitative" component={AnalyseQuantitative} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>
