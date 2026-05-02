@@ -18,6 +18,7 @@ import MlInsights from "@/pages/ml-insights";
 import AnalyseQuantitative from "@/pages/analyse-quantitative";
 import PortfolioSimulator from "@/pages/portfolio-simulator";
 import PortfolioReport from "@/pages/portfolio-report";
+import Profile from "@/pages/profile";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -29,19 +30,20 @@ function Router() {
       <Route>
         <AppLayout>
           <Switch>
-            <Route path="/" component={Dashboard} />
-            <Route path="/projects/new" component={AddProject} />
-            <Route path="/projects/:id" component={ProjectDetail} />
-            <Route path="/projects" component={Projects} />
-            <Route path="/companies/new" component={AddCompany} />
-            <Route path="/companies/:id" component={CompanyDetail} />
-            <Route path="/companies" component={Companies} />
-            <Route path="/comparison" component={Comparison} />
-            <Route path="/valuation/new" component={AddValuation} />
-            <Route path="/valuation" component={Valuation} />
-            <Route path="/ml-insights" component={MlInsights} />
-            <Route path="/analyse-quantitative" component={AnalyseQuantitative} />
-            <Route path="/portfolio" component={PortfolioSimulator} />
+            <Route path="/"                       component={Dashboard} />
+            <Route path="/projects/new"            component={AddProject} />
+            <Route path="/projects/:id"            component={ProjectDetail} />
+            <Route path="/projects"                component={Projects} />
+            <Route path="/companies/new"           component={AddCompany} />
+            <Route path="/companies/:id"           component={CompanyDetail} />
+            <Route path="/companies"               component={Companies} />
+            <Route path="/comparison"              component={Comparison} />
+            <Route path="/valuation/new"           component={AddValuation} />
+            <Route path="/valuation"               component={Valuation} />
+            <Route path="/ml-insights"             component={MlInsights} />
+            <Route path="/analyse-quantitative"    component={AnalyseQuantitative} />
+            <Route path="/portfolio"               component={PortfolioSimulator} />
+            <Route path="/profile"                 component={Profile} />
             <Route component={NotFound} />
           </Switch>
         </AppLayout>
