@@ -63,11 +63,11 @@ export function AppLayout({ children }: { children: ReactNode }) {
         <div className="p-4 border-t border-sidebar-border">
           <div className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-sidebar-accent/50 cursor-pointer transition-colors">
             <Avatar className="h-9 w-9 border border-sidebar-border">
-              <AvatarFallback className="bg-sidebar-accent text-sidebar-foreground">AD</AvatarFallback>
+              <AvatarFallback className="bg-sidebar-accent text-sidebar-foreground font-bold text-xs">WA</AvatarFallback>
             </Avatar>
             <div className="flex flex-col flex-1 overflow-hidden">
-              <span className="text-sm font-medium text-sidebar-foreground truncate">Amine Director</span>
-              <span className="text-xs text-sidebar-foreground/60 truncate">Chief Analyst</span>
+              <span className="text-sm font-medium text-sidebar-foreground truncate">Wassim AIDAT</span>
+              <span className="text-xs text-sidebar-foreground/60 truncate">Directeur d'Investissement</span>
             </div>
             <Settings className="h-4 w-4 text-sidebar-foreground/60" />
           </div>
