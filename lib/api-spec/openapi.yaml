@@ -3,20 +3,30 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: FNI Investment Platform API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: dashboard
+    description: Dashboard KPIs and summaries
+  - name: projects
+    description: Investment projects management
+  - name: companies
+    description: Companies management and analysis
+  - name: valuations
+    description: Valuations management
+  - name: ml
+    description: Machine learning insights and predictions
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +34,383 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get global KPI summary for the portfolio
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /dashboard/activity:
+    get:
+      operationId: getDashboardActivity
+      tags: [dashboard]
+      summary: Recent activity feed
+      responses:
+        "200":
+          description: List of recent activities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActivityItem"
+
+  /dashboard/sector-breakdown:
+    get:
+      operationId: getSectorBreakdown
+      tags: [dashboard]
+      summary: Portfolio allocation breakdown by sector
+      responses:
+        "200":
+          description: Sector breakdown
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SectorBreakdown"
+
+  /projects:
+    get:
+      operationId: listProjects
+      tags: [projects]
+      summary: List all investment projects
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [active, completed, suspended, evaluation, pipeline]
+        - name: sector
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Project"
+    post:
+      operationId: createProject
+      tags: [projects]
+      summary: Create a new investment project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProjectBody"
+      responses:
+        "201":
+          description: Created project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+
+  /projects/stats:
+    get:
+      operationId: getProjectStats
+      tags: [projects]
+      summary: Aggregated project statistics
+      responses:
+        "200":
+          description: Project statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectStats"
+
+  /projects/{id}:
+    get:
+      operationId: getProject
+      tags: [projects]
+      summary: Get a project by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Project details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        "404":
+          description: Not found
+    put:
+      operationId: updateProject
+      tags: [projects]
+      summary: Update a project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProjectBody"
+      responses:
+        "200":
+          description: Updated project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+    delete:
+      operationId: deleteProject
+      tags: [projects]
+      summary: Delete a project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /companies:
+    get:
+      operationId: listCompanies
+      tags: [companies]
+      summary: List all companies
+      parameters:
+        - name: sector
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [active, inactive, watchlist]
+      responses:
+        "200":
+          description: List of companies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Company"
+    post:
+      operationId: createCompany
+      tags: [companies]
+      summary: Create a new company
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCompanyBody"
+      responses:
+        "201":
+          description: Created company
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company"
+
+  /companies/{id}:
+    get:
+      operationId: getCompany
+      tags: [companies]
+      summary: Get a company by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Company details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company"
+        "404":
+          description: Not found
+    put:
+      operationId: updateCompany
+      tags: [companies]
+      summary: Update a company
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCompanyBody"
+      responses:
+        "200":
+          description: Updated company
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company"
+
+  /companies/compare:
+    get:
+      operationId: compareCompanies
+      tags: [companies]
+      summary: Compare multiple companies side by side
+      parameters:
+        - name: ids
+          in: query
+          required: true
+          schema:
+            type: string
+            description: Comma-separated company IDs
+      responses:
+        "200":
+          description: Comparison data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CompanyComparison"
+
+  /valuations:
+    get:
+      operationId: listValuations
+      tags: [valuations]
+      summary: List valuations
+      parameters:
+        - name: companyId
+          in: query
+          schema:
+            type: integer
+        - name: projectId
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of valuations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Valuation"
+    post:
+      operationId: createValuation
+      tags: [valuations]
+      summary: Create a new valuation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateValuationBody"
+      responses:
+        "201":
+          description: Created valuation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Valuation"
+
+  /valuations/{id}:
+    get:
+      operationId: getValuation
+      tags: [valuations]
+      summary: Get a valuation by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Valuation details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Valuation"
+
+  /ml/predictions:
+    get:
+      operationId: getMlPredictions
+      tags: [ml]
+      summary: ML-based performance predictions for all projects
+      responses:
+        "200":
+          description: ML predictions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MlPrediction"
+
+  /ml/risk-scores:
+    get:
+      operationId: getMlRiskScores
+      tags: [ml]
+      summary: Risk scores for all projects and companies
+      responses:
+        "200":
+          description: Risk scores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RiskScore"
+
+  /ml/portfolio-forecast:
+    get:
+      operationId: getMlPortfolioForecast
+      tags: [ml]
+      summary: Portfolio value forecast for the next 12 months
+      responses:
+        "200":
+          description: Portfolio forecast
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ForecastPoint"
+
 components:
   schemas:
     HealthStatus:
@@ -31,6 +418,437 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
 
+    DashboardSummary:
+      type: object
+      properties:
+        totalPortfolioValue:
+          type: number
+        totalProjects:
+          type: integer
+        activeProjects:
+          type: integer
+        totalCompanies:
+          type: integer
+        averageIrr:
+          type: number
+        totalInvested:
+          type: number
+        portfolioGrowthPercent:
+          type: number
+        projectsAtRisk:
+          type: integer
+      required:
+        - totalPortfolioValue
+        - totalProjects
+        - activeProjects
+        - totalCompanies
+        - averageIrr
+        - totalInvested
+        - portfolioGrowthPercent
+        - projectsAtRisk
+
+    ActivityItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [project_created, project_updated, valuation_added, company_added, risk_alert, milestone_reached]
+        title:
+          type: string
+        description:
+          type: string
+        entityId:
+          type: integer
+        entityType:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, type, title, description, entityType, createdAt]
+
+    SectorBreakdown:
+      type: object
+      properties:
+        sector:
+          type: string
+        value:
+          type: number
+        count:
+          type: integer
+        percentage:
+          type: number
+      required: [sector, value, count, percentage]
+
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        sector:
+          type: string
+        status:
+          type: string
+          enum: [active, completed, suspended, evaluation, pipeline]
+        investmentAmount:
+          type: number
+        currentValue:
+          type: number
+        irr:
+          type: number
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        companyId:
+          type: integer
+        companyName:
+          type: string
+        region:
+          type: string
+        riskLevel:
+          type: string
+          enum: [low, medium, high, critical]
+        progressPercent:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - sector
+        - status
+        - investmentAmount
+        - currentValue
+        - startDate
+        - region
+        - riskLevel
+        - progressPercent
+        - createdAt
+        - updatedAt
+
+    CreateProjectBody:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        sector:
+          type: string
+        status:
+          type: string
+          enum: [active, completed, suspended, evaluation, pipeline]
+        investmentAmount:
+          type: number
+        currentValue:
+          type: number
+        irr:
+          type: number
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        companyId:
+          type: integer
+        region:
+          type: string
+        riskLevel:
+          type: string
+          enum: [low, medium, high, critical]
+        progressPercent:
+          type: number
+      required:
+        - name
+        - sector
+        - status
+        - investmentAmount
+        - startDate
+        - region
+        - riskLevel
+
+    ProjectStats:
+      type: object
+      properties:
+        byStatus:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+              count:
+                type: integer
+              value:
+                type: number
+            required: [status, count, value]
+        bySector:
+          type: array
+          items:
+            type: object
+            properties:
+              sector:
+                type: string
+              count:
+                type: integer
+              value:
+                type: number
+            required: [sector, count, value]
+        byRisk:
+          type: array
+          items:
+            type: object
+            properties:
+              risk:
+                type: string
+              count:
+                type: integer
+            required: [risk, count]
+        monthlyInvestment:
+          type: array
+          items:
+            type: object
+            properties:
+              month:
+                type: string
+              amount:
+                type: number
+            required: [month, amount]
+      required: [byStatus, bySector, byRisk, monthlyInvestment]
+
+    Company:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        sector:
+          type: string
+        status:
+          type: string
+          enum: [active, inactive, watchlist]
+        revenue:
+          type: number
+        employees:
+          type: integer
+        foundedYear:
+          type: integer
+        region:
+          type: string
+        description:
+          type: string
+        totalInvestmentReceived:
+          type: number
+        currentValuation:
+          type: number
+        ebitda:
+          type: number
+        debtRatio:
+          type: number
+        growthRate:
+          type: number
+        activeProjects:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - sector
+        - status
+        - region
+        - createdAt
+        - updatedAt
+
+    CreateCompanyBody:
+      type: object
+      properties:
+        name:
+          type: string
+        sector:
+          type: string
+        status:
+          type: string
+          enum: [active, inactive, watchlist]
+        revenue:
+          type: number
+        employees:
+          type: integer
+        foundedYear:
+          type: integer
+        region:
+          type: string
+        description:
+          type: string
+        ebitda:
+          type: number
+        debtRatio:
+          type: number
+        growthRate:
+          type: number
+      required:
+        - name
+        - sector
+        - status
+        - region
+
+    CompanyComparison:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        sector:
+          type: string
+        revenue:
+          type: number
+        currentValuation:
+          type: number
+        ebitda:
+          type: number
+        debtRatio:
+          type: number
+        growthRate:
+          type: number
+        irr:
+          type: number
+        riskScore:
+          type: number
+        employees:
+          type: integer
+      required: [id, name, sector]
+
+    Valuation:
+      type: object
+      properties:
+        id:
+          type: integer
+        companyId:
+          type: integer
+        projectId:
+          type: integer
+        method:
+          type: string
+          enum: [dcf, comparables, asset_based, market, book_value]
+        valuationDate:
+          type: string
+          format: date
+        value:
+          type: number
+        currency:
+          type: string
+        assumptions:
+          type: string
+        analyst:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, method, valuationDate, value, currency, createdAt]
+
+    CreateValuationBody:
+      type: object
+      properties:
+        companyId:
+          type: integer
+        projectId:
+          type: integer
+        method:
+          type: string
+          enum: [dcf, comparables, asset_based, market, book_value]
+        valuationDate:
+          type: string
+          format: date
+        value:
+          type: number
+        currency:
+          type: string
+        assumptions:
+          type: string
+        analyst:
+          type: string
+      required: [method, valuationDate, value, currency]
+
+    MlPrediction:
+      type: object
+      properties:
+        projectId:
+          type: integer
+        projectName:
+          type: string
+        predictedIrr:
+          type: number
+        predictedCompletion:
+          type: string
+          format: date
+        successProbability:
+          type: number
+        confidence:
+          type: number
+        keyFactors:
+          type: array
+          items:
+            type: string
+      required: [projectId, projectName, predictedIrr, successProbability, confidence, keyFactors]
+
+    RiskScore:
+      type: object
+      properties:
+        entityId:
+          type: integer
+        entityType:
+          type: string
+          enum: [project, company]
+        entityName:
+          type: string
+        riskScore:
+          type: number
+        riskLevel:
+          type: string
+          enum: [low, medium, high, critical]
+        marketRisk:
+          type: number
+        financialRisk:
+          type: number
+        operationalRisk:
+          type: number
+        updatedAt:
+          type: string
+          format: date-time
+      required: [entityId, entityType, entityName, riskScore, riskLevel, marketRisk, financialRisk, operationalRisk, updatedAt]
+
+    ForecastPoint:
+      type: object
+      properties:
+        month:
+          type: string
+        predictedValue:
+          type: number
+        optimistic:
+          type: number
+        pessimistic:
+          type: number
+        isHistorical:
+          type: boolean
+      required: [month, predictedValue, optimistic, pessimistic, isHistorical]
