@@ -15,8 +15,9 @@ import {
 import { motion } from "framer-motion";
 import {
   PieChart as PieIcon, TrendingUp, ShieldAlert, Layers, CheckSquare,
-  Square, Info, Sparkles, AlertTriangle, BarChart2,
+  Square, Info, Sparkles, AlertTriangle, BarChart2, FileText,
 } from "lucide-react";
+import { useLocation } from "wouter";
 
 const TABS = ["Vue Portefeuille", "Optimisation Budgétaire", "Risque Consolidé", "Frontière Efficiente"];
 
@@ -50,6 +51,7 @@ function estimateProjectCFs(investment: number, irr: number | null, years: numbe
 }
 
 export default function PortfolioSimulator() {
+  const [, navigate] = useLocation();
   const [activeTab, setActiveTab] = useState(0);
   const [discountRate, setDiscountRate] = useState(10);
   const [budget, setBudget] = useState(5000000000);
@@ -196,6 +198,13 @@ export default function PortfolioSimulator() {
             <Label className="text-xs">Taux d'actualisation k (%)</Label>
             <Input type="number" value={discountRate} onChange={e => setDiscountRate(parseFloat(e.target.value)||0)} className="h-8 w-28 text-sm" />
           </div>
+          <button
+            onClick={() => navigate("/portfolio/report")}
+            className="flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors shadow-sm mt-4"
+          >
+            <FileText className="h-4 w-4" />
+            Rapport PDF
+          </button>
         </div>
       </div>
 
