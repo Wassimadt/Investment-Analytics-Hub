@@ -116,12 +116,8 @@ router.post("/projects", async (req, res) => {
         investmentAmount: String(body.investmentAmount),
         currentValue: String(body.currentValue ?? body.investmentAmount),
         irr: body.irr !== undefined ? String(body.irr) : null,
-        startDate: body.startDate instanceof Date ? body.startDate.toISOString().split("T")[0] : body.startDate,
-        endDate: body.endDate
-          ? body.endDate instanceof Date
-            ? body.endDate.toISOString().split("T")[0]
-            : body.endDate
-          : null,
+        startDate: body.startDate ? new Date(body.startDate).toISOString().split("T")[0] : new Date().toISOString().split("T")[0],
+endDate: body.endDate ? new Date(body.endDate).toISOString().split("T")[0] : null,,
         companyId: body.companyId,
         region: body.region,
         riskLevel: body.riskLevel,
